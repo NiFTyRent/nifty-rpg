@@ -3,6 +3,12 @@ import { LuminusInterfaceController } from '../plugins/LuminusInterfaceControlle
 import intro_video from '../assets/video/intro_video_converted_FULLHD.mp4';
 import { NineSlice } from 'phaser3-nineslice';
 import { PanelComponent } from '../components/PanelComponent';
+import * as nearAPI from "near-api-js";
+
+const { keyStores, connect, WalletConnection } = nearAPI;
+
+
+
 
 export class MainMenuScene extends Phaser.Scene {
     constructor() {
@@ -48,6 +54,11 @@ export class MainMenuScene extends Phaser.Scene {
          *  @type { any }
          */
         this.lastMenuAction = null;
+
+        /**
+         * NEAR wallet connection
+         */
+        this.wallet = null;
     }
 
     preload() {
@@ -55,6 +66,29 @@ export class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
+        const myKeyStore = new keyStores.BrowserLocalStorageKeyStore();
+
+        const connectionConfig = {
+            networkId: "testnet",
+            keyStore: myKeyStore, // first create a key store
+            nodeUrl: "https://rpc.testnet.near.org",
+            walletUrl: "https://wallet.testnet.near.org",
+            helperUrl: "https://helper.testnet.near.org",
+            explorerUrl: "https://explorer.testnet.near.org",
+        };
+
+        connect(connectionConfig).then((nearConnection) => {
+            this.wallet = new WalletConnection(nearConnection);
+            // Make sure the account is loaded.
+            setTimeout(() => {
+                const signedIn = this.wallet.isSignedIn();
+                this._render(signedIn);
+            }, 10)
+        })
+
+    }
+
+    _render(signedIn) {
         this.video = this.add.video(this.cameras.main.x, this.cameras.main.y, 'intro_video');
 
         if (this.scale.orientation === 'portrait-primary') {
@@ -80,36 +114,83 @@ export class MainMenuScene extends Phaser.Scene {
         this.themeSound.play();
         this.luminusInterfaceControler = new LuminusInterfaceController(this);
 
-        this.gameStartText = this.add
-            .text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y, 'Start Game', {
-                fontSize: 34,
-                fontFamily: '"Press Start 2P"',
-            })
-            .setOrigin(0.5, 0.5)
-            .setInteractive();
+        this.luminusInterfaceControler.interfaceElements[0] = [];
+        this.luminusInterfaceControler.closeAction = null;
 
-        this.gameStartText.on('pointerdown', (pointer) => {
-            this.startGame();
-        });
+        if (!signedIn) {
+            this.signInText = this.add
+                .text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y, 'Sign in with NEAR wallet', {
+                    fontSize: 34,
+                    fontFamily: '"Press Start 2P"',
+                })
+                .setOrigin(0.5, 0.5)
+                .setInteractive();
 
-        this.creditsText = this.add
-            .text(this.gameStartText.x, this.gameStartText.y + 60, 'Credits', {
-                fontSize: 34,
-                fontFamily: this.fontFamily,
-            })
-            .setOrigin(0.5, 0.5)
-            .setInteractive();
+            this.signInText.on('pointerdown', (pointer) => {
+                this._signIn();
+            });
 
-        this.creditsText.on('pointerdown', (pointer, object) => {
-            console.log(object);
-            this.showCredits();
-        });
+            const signInAction = {
+                element: this.signInText,
+                action: '_signIn',
+                context: this,
+            };
+            this.luminusInterfaceControler.interfaceElements[0][0] = [signInAction];
+            this.luminusInterfaceControler.currentElementAction = signInAction;
+            this.luminusInterfaceControler.updateHighlightedElement(this.signInText);
 
-        this.setMainMenuActions();
+        } else {
+            this.gameStartText = this.add
+                .text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y, 'Start Game', {
+                    fontSize: 34,
+                    fontFamily: '"Press Start 2P"',
+                })
+                .setOrigin(0.5, 0.5)
+                .setInteractive()
+                .on('pointerdown', (pointer) => {
+                    this.startGame()
+                });
+            const startGameAction = {
+                element: this.gameStartText,
+                action: 'startGame',
+                context: this,
+                args: 'MainScene',
+            }
+            this.luminusInterfaceControler.interfaceElements[0][0] = [startGameAction];
+
+            const signOutText = this.add
+                .text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y + 60, 'Log out', {
+                    fontSize: 34,
+                    fontFamily: '"Press Start 2P"',
+                })
+                .setOrigin(0.5, 0.5)
+                .setInteractive()
+                .on('pointerdown', (pointer) => {
+                    this._signOut();
+                });
+
+            this.luminusInterfaceControler.interfaceElements[0][1] = [{
+                element: signOutText,
+                action: '_signOut',
+                context: this,
+            }];
+
+            this.luminusInterfaceControler.currentElementAction = startGameAction;
+            this.luminusInterfaceControler.updateHighlightedElement(this.gameStartText);
+        }
 
         this.scale.on('resize', (resize) => {
             this.resizeAll(resize);
         });
+
+    }
+
+    _signIn() {
+        this.wallet.requestSignIn({ contractId: 'niftyrpg.mintspace2.testnet' });
+    }
+    _signOut() {
+        this.wallet.signOut();
+        this.scene.start('MainMenuScene');
     }
 
     /**
@@ -132,95 +213,13 @@ export class MainMenuScene extends Phaser.Scene {
         }
     }
 
-    setMainMenuActions() {
-        // Sets the Firts action.
-        this.luminusInterfaceControler.interfaceElements[0] = [];
-        this.luminusInterfaceControler.interfaceElements[0][0] = [];
-        let firstAction = {
-            element: this.gameStartText,
-            action: 'startGame',
-            context: this,
-            args: 'MainScene',
-        };
-        this.luminusInterfaceControler.closeAction = null;
-        this.luminusInterfaceControler.currentElementAction = firstAction;
-        this.luminusInterfaceControler.interfaceElements[0][0].push(firstAction);
-
-        let credits = {
-            element: this.creditsText,
-            action: 'showCredits',
-            context: this,
-            args: 'Credits',
-        };
-        this.luminusInterfaceControler.interfaceElements[0][1] = [];
-        this.luminusInterfaceControler.interfaceElements[0][1].push(credits);
-
-        this.luminusInterfaceControler.updateHighlightedElement(firstAction.element);
-    }
-
-    showCredits() {
-        this.luminusInterfaceControler.menuHistoryAdd();
-        this.panelComponent = new PanelComponent(this);
-        this.creditsBackground = this.panelComponent.panelBackground;
-        this.creditsTitle = this.panelComponent.panelTitle;
-        this.creditsTitleText = this.panelComponent.panelTitleText;
-        this.panelComponent.setTitleText('Credits');
-        this.closeButton = this.panelComponent.closeButton;
-        this.creditsTextContent = this.add
-            .text(
-                this.creditsBackground.x + 30,
-                this.creditsBackground.y + this.panelComponent.backgroundMainContentPaddingTop,
-                `Multiple Songs by Matthew Pablo https://matthewpablo.com/services/
-
-Forest - Intro Scene Music by "syncopika"
-            `,
-                {
-                    wordWrap: {
-                        width: this.textWidth,
-                    },
-                    fontSize: 11,
-                    fontFamily: this.fontFamily,
-                }
-            )
-            .setOrigin(0, 0);
-
-        let closeAction = {
-            element: this.closeButton,
-            action: 'closeCredits',
-            context: this,
-            args: '',
-        };
-        this.luminusInterfaceControler.removeCurrentSelectionHighlight();
-        this.luminusInterfaceControler.clearItems();
-        this.luminusInterfaceControler.closeAction = closeAction;
-        this.luminusInterfaceControler.currentElementAction = closeAction;
-        this.luminusInterfaceControler.interfaceElements[0] = [];
-        this.luminusInterfaceControler.interfaceElements[0][0] = [];
-        this.luminusInterfaceControler.interfaceElements[0][0].push(closeAction);
-        this.luminusInterfaceControler.updateHighlightedElement(closeAction.element);
-
-        this.closeButton.on('pointerup', (pointer) => {
-            this.closeCredits();
-        });
-    }
-
-    closeCredits() {
-        this.panelComponent.destroy();
-        this.creditsTextContent.destroy();
-        this.luminusInterfaceControler.closeAction = null;
-        this.luminusInterfaceControler.currentElementAction = null;
-        this.luminusInterfaceControler.clearItems();
-        this.setMainMenuActions();
-        this.luminusInterfaceControler.menuHistoryRetrieve();
-    }
-
     startGame() {
         this.themeSound.stop();
         this.cameras.main.fadeOut(1000, 0, 0, 0);
         let startSound = this.sound.add('start_game');
         startSound.play();
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-            this.scene.start('MobileCheckScene');
+            this.scene.start('MainScene');
             this.scene.stop();
         });
     }

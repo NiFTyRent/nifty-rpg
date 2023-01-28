@@ -84,7 +84,7 @@ export class MobileCheckScene extends Phaser.Scene {
          * The next scene which the player will be moved to.
          * @type { string }
          */
-        this.nextScene = 'IntroScene';
+        this.nextScene = 'MainMenuScene';
     }
 
     create() {
