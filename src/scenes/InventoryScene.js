@@ -340,13 +340,13 @@ export class InventoryScene extends Phaser.Scene {
         const padding = Math.ceil(
             (this.inventoryBackground.width * this.inventoryBackground.scaleX -
                 slotsNumberHorizontal * (this.slotSize + this.slotMargin)) /
-                2
+            2
         );
 
         let slotsWorkingHeight = Math.abs(
             this.inventoryBackground.height * this.inventoryBackground.scaleY -
-                this.backgroundSlotPaddingTop -
-                this.backgroundSlotPaddingBottom
+            this.backgroundSlotPaddingTop -
+            this.backgroundSlotPaddingBottom
         );
 
         if (!LuminusUtils.isMobile() || (LuminusUtils.isMobile() && this.input.gamepad.pad1))
@@ -363,12 +363,12 @@ export class InventoryScene extends Phaser.Scene {
                 let slot = this.add
                     .image(
                         this.inventoryBackground.x +
-                            (this.slotSize + this.slotMargin) * col +
-                            padding +
-                            this.slotMargin / 2,
+                        (this.slotSize + this.slotMargin) * col +
+                        padding +
+                        this.slotMargin / 2,
                         this.inventoryBackground.y +
-                            (this.slotSize + this.slotMargin) * row +
-                            this.backgroundSlotPaddingTop,
+                        (this.slotSize + this.slotMargin) * row +
+                        this.backgroundSlotPaddingTop,
                         this.inventorySlotTexture
                     )
                     .setScrollFactor(0, 0)
@@ -408,13 +408,13 @@ export class InventoryScene extends Phaser.Scene {
         const padding = Math.ceil(
             (this.inventoryBackground.width * this.inventoryBackground.scaleX -
                 slotsNumberHorizontal * (this.slotSize + this.slotMargin)) /
-                2
+            2
         );
 
         let slotsWorkingHeight = Math.abs(
             this.inventoryBackground.height * this.inventoryBackground.scaleY -
-                this.backgroundSlotPaddingTop -
-                this.backgroundSlotPaddingBottom
+            this.backgroundSlotPaddingTop -
+            this.backgroundSlotPaddingBottom
         );
 
         // Max number of Slots taking in count the Available space, Slot Size and Margin.
@@ -427,12 +427,12 @@ export class InventoryScene extends Phaser.Scene {
                 if (slot) {
                     slot.setPosition(
                         this.inventoryBackground.x +
-                            (this.slotSize + this.slotMargin) * col +
-                            padding +
-                            this.slotMargin / 2,
+                        (this.slotSize + this.slotMargin) * col +
+                        padding +
+                        this.slotMargin / 2,
                         this.inventoryBackground.y +
-                            (this.slotSize + this.slotMargin) * row +
-                            this.backgroundSlotPaddingTop
+                        (this.slotSize + this.slotMargin) * row +
+                        this.backgroundSlotPaddingTop
                     );
                     if (slot.item) {
                         let item = slot.item;
@@ -544,8 +544,8 @@ export class InventoryScene extends Phaser.Scene {
 
         this.actionButtonLegend.text = this.add.text(
             this.actionButtonLegend.x +
-                this.actionButtonLegend.width * this.actionButtonLegend.scaleX +
-                this.slotMargin,
+            this.actionButtonLegend.width * this.actionButtonLegend.scaleX +
+            this.slotMargin,
             this.actionButtonLegend.y,
             'Use/Action'
         );
@@ -555,8 +555,8 @@ export class InventoryScene extends Phaser.Scene {
         //////
         this.descriptionButtonLegend = this.add.sprite(
             this.actionButtonLegend.text.x +
-                this.actionButtonLegend.text.width * this.actionButtonLegend.text.scaleX +
-                this.slotMargin,
+            this.actionButtonLegend.text.width * this.actionButtonLegend.text.scaleX +
+            this.slotMargin,
             this.actionButtonLegend.text.y,
             this.descriptionButtonLegendDesktop
         );
@@ -565,8 +565,8 @@ export class InventoryScene extends Phaser.Scene {
 
         this.descriptionButtonLegend.text = this.add.text(
             this.descriptionButtonLegend.x +
-                this.descriptionButtonLegend.width * this.descriptionButtonLegend.scaleX +
-                this.slotMargin,
+            this.descriptionButtonLegend.width * this.descriptionButtonLegend.scaleX +
+            this.slotMargin,
             this.descriptionButtonLegend.y,
             'Show Info'
         );
@@ -575,8 +575,8 @@ export class InventoryScene extends Phaser.Scene {
 
         this.backButtonLegend = this.add.sprite(
             this.descriptionButtonLegend.text.x +
-                this.descriptionButtonLegend.text.width * this.descriptionButtonLegend.text.scaleX +
-                this.slotMargin,
+            this.descriptionButtonLegend.text.width * this.descriptionButtonLegend.text.scaleX +
+            this.slotMargin,
             this.descriptionButtonLegend.text.y,
             this.backButtonDesktopSpriteName
         );
@@ -656,8 +656,8 @@ export class InventoryScene extends Phaser.Scene {
 
             this.closeButton.setPosition(
                 this.inventoryBackground.x +
-                    this.inventoryBackground.width * this.inventoryBackground.scaleX -
-                    this.backgroundSlotPadding * 1.5,
+                this.inventoryBackground.width * this.inventoryBackground.scaleX -
+                this.backgroundSlotPadding * 1.5,
                 this.inventoryBackground.y + this.backgroundSlotPadding * 1.5
             );
             if (this.actionButtonLegend)
@@ -669,37 +669,37 @@ export class InventoryScene extends Phaser.Scene {
             if (this.actionButtonLegend.text)
                 this.actionButtonLegend.text.setPosition(
                     this.actionButtonLegend.x +
-                        this.actionButtonLegend.width * this.actionButtonLegend.scaleX +
-                        this.slotMargin,
+                    this.actionButtonLegend.width * this.actionButtonLegend.scaleX +
+                    this.slotMargin,
                     this.actionButtonLegend.y
                 );
             if (this.descriptionButtonLegend)
                 this.descriptionButtonLegend.setPosition(
                     this.actionButtonLegend.text.x +
-                        this.actionButtonLegend.text.width * this.actionButtonLegend.text.scaleX +
-                        this.slotMargin,
+                    this.actionButtonLegend.text.width * this.actionButtonLegend.text.scaleX +
+                    this.slotMargin,
                     this.actionButtonLegend.text.y
                 );
             if (this.descriptionButtonLegend.text)
                 this.descriptionButtonLegend.text.setPosition(
                     this.descriptionButtonLegend.x +
-                        this.descriptionButtonLegend.width * this.descriptionButtonLegend.scaleX +
-                        this.slotMargin,
+                    this.descriptionButtonLegend.width * this.descriptionButtonLegend.scaleX +
+                    this.slotMargin,
                     this.descriptionButtonLegend.y
                 );
 
             if (this.backButtonLegend)
                 this.backButtonLegend.setPosition(
                     this.descriptionButtonLegend.text.x +
-                        this.descriptionButtonLegend.text.width * this.descriptionButtonLegend.text.scaleX +
-                        this.slotMargin,
+                    this.descriptionButtonLegend.text.width * this.descriptionButtonLegend.text.scaleX +
+                    this.slotMargin,
                     this.descriptionButtonLegend.text.y
                 );
             if (this.backButtonLegend.text)
                 this.backButtonLegend.text.setPosition(
                     this.backButtonLegend.x +
-                        this.backButtonLegend.width * this.backButtonLegend.scaleX +
-                        this.slotMargin,
+                    this.backButtonLegend.width * this.backButtonLegend.scaleX +
+                    this.slotMargin,
                     this.backButtonLegend.y
                 );
 

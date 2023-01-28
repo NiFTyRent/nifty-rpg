@@ -12,28 +12,40 @@ import { ITEM_TYPE } from './ItemTypes';
  * Then the transpiles will take care to recover the HP.
  */
 export const DB_SEED_ITEMS = [
-    {
-        id: 1,
-        name: 'Red Potion',
-        type: ITEM_TYPE.USABLE,
-        buffType: 0, // Means you can use as many as you want. No restrictions.
-        description: 'A small potion that recovers 2 Health Points [HP].',
-        script: 'rec hp 2;',
-        texture: 'red_potion',
-        sfx: 'heal',
-        stackable: true,
-        inventoryScale: 1.7, // How much should the item scale when the inventory is opened.
-    },
-    {
-        id: 2,
-        name: 'Dark Potion',
-        type: ITEM_TYPE.USABLE,
-        buffType: BUFF_TYPES.ATK01,
-        description: `They say this potion is only for those who have a strong heart, for those who drunk it became elves. (Increases the ATACK by 5 points for 60 seconds.)`,
-        script: 'buff atk 5 60;',
-        texture: 'atk_potion',
-        sfx: 'heal',
-        stackable: true,
-        inventoryScale: 1.7, // How much should the item scale when the inventory is opened.
-    },
+  {
+    id: 1,
+    name: 'Red Potion',
+    type: ITEM_TYPE.USABLE,
+    buffType: 0, // Means you can use as many as you want. No restrictions.
+    description: 'A small potion that recovers 2 Health Points [HP].',
+    script: 'rec hp 2;',
+    texture: 'red_potion',
+    sfx: 'heal',
+    stackable: true,
+    inventoryScale: 1.7, // How much should the item scale when the inventory is opened.
+  },
+  {
+    id: 2,
+    name: 'Dark Potion',
+    type: ITEM_TYPE.USABLE,
+    buffType: BUFF_TYPES.ATK01,
+    description: `They say this potion is only for those who have a strong heart, for those who drunk it became elves. (Increases the ATACK by 5 points for 60 seconds.)`,
+    script: 'buff atk 5 60;',
+    texture: 'atk_potion',
+    sfx: 'heal',
+    stackable: true,
+    inventoryScale: 1.7, // How much should the item scale when the inventory is opened.
+  },
+  {
+    id: 3,
+    name: 'Candle',
+    type: ITEM_TYPE.EQUIP,
+    buffType: 0, // Means you can use as many as you want. No restrictions.
+    description: 'Lit up the surrunding.',
+    script: '',
+    texture: 'candle',
+    sfx: 'heal',
+    stackable: false,
+    inventoryScale: 1, // How much should the item scale when the inventory is opened.
+  },
 ];

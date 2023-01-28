@@ -1,4 +1,4 @@
-import Phaser, { Game, GameObjects } from 'phaser';
+import Phaser from 'phaser';
 import { AttributesManager } from '../plugins/attributes/AttributesManager';
 import { ENTITIES } from '../consts/Entities';
 import { LuminusHUDProgressBar } from '../plugins/HUD/LuminusHUDProgressBar';
@@ -53,7 +53,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
          * @type { number }
          * @default
          */
-        this.speed = 70;
+        this.speed = 170;
 
         /**
          * Defines the hitzone width.

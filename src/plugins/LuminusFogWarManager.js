@@ -111,7 +111,7 @@ export class LuminusFogWarManager {
             this.player.container.y,
             this.maskTextureName
         );
-        this.imageMask.scale = 1.5;
+        this.imageMask.scale = this.visibleRange();
         this.imageMask.visible = false;
 
         // this.renderTexture.mask.invertAlpha = true;
@@ -132,6 +132,14 @@ export class LuminusFogWarManager {
             this.renderTexture.erase(this.imageMask);
             this.renderTexture.erase(this.imageMask);
             this.renderTexture.erase(this.imageMask);
+        }
+    }
+
+    visibleRange() {
+        if (this.player.items.find(i => i.id == 3)) {
+            return 2.0;
+        } else {
+            return 0.7;
         }
     }
 }
