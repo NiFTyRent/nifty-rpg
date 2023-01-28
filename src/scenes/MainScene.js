@@ -21,14 +21,6 @@ export class MainScene extends Phaser.Scene {
     }
 
     create() {
-        // if (
-        //     !this.scale.isFullscreen && !this.sys.game.device.os.desktop
-        //         ? true
-        //         : false
-        // ) {
-        //     this.scale.startFullscreen();
-        // }
-
         this.cameras.main.setZoom(2.5);
 
         this.mapCreator = new LuminusMapCreator(this);
@@ -56,8 +48,6 @@ export class MainScene extends Phaser.Scene {
         this.particles = new LuminusEnvironmentParticles(this, this.mapCreator.map);
         this.particles.create();
 
-        // this.outlineEffect = new LuminusOutlineEffect(this);
-
         this.sound.volume = 0.35;
         this.themeSound = this.sound.add('path_to_lake_land', {
             loop: true,
@@ -69,9 +59,6 @@ export class MainScene extends Phaser.Scene {
         this.luminusEnemyZones = new LuminusEnemyZones(this, this.mapCreator.map);
         this.luminusEnemyZones.create();
 
-        // new Item(this, this.player.container.x, this.player.container.y - 40, 2);
-        // new Item(this, this.player.container.x, this.player.container.y - 50, 2);
-        // new Item(this, this.player.container.x, this.player.container.y - 60, 1);
     }
 
     /**
@@ -82,14 +69,5 @@ export class MainScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // this.outlineEffect.removeEffect(this.player.container);
-        // this.physics.overlap(
-        //     this.player,
-        //     this.overplayer_layer,
-        //     () => {
-        //         this.outlineEffect.applyEffect(this.player.container);
-        //     },
-        //     (hitZone, tile) => tile.index > -1
-        // );
     }
 }
