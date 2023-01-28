@@ -4,8 +4,8 @@
   "description": "A Luminus Action RPG Template. This is a project that will help you create your Action RPG Game with Phaser and JavaScript.",
   "main": "src/index.js",
   "scripts": {
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && webpack --config webpack/prod.js ",
-    "start": "export NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server --config webpack/base.js --open",
+    "build": "webpack --config webpack/prod.js ",
+    "start": "webpack-dev-server --config webpack/base.js --open",
     "jsdoc": "npx jsdoc src -r -c jsdoc.config.json && npx browser-sync start --server --files 'docs/*.html' --startPath docs/ --watch 'docs/*.html'",
     "tutorial": "npx browser-sync start --server --files 'tutorial/*.html' --startPath tutorial/ --watch 'tutorial/*.html'",
     "serve-tutorial": "cd tutorial-admin && php -S localhost:3500 system/router.php",
