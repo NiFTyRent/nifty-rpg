@@ -4,11 +4,18 @@ import { LuminusDungeonGenerator } from '../plugins/LuminusDungeonGenerator';
 import { LuminusFogWarManager } from '../plugins/LuminusFogWarManager';
 import { Enemy } from '../entities/Enemy';
 import { PlayerConfig } from '../consts/player/Player';
+import { NiftyRent } from "@niftyrent/sdk"
 
 export class DungeonScene extends Phaser.Scene {
     constructor() {
         super({
             key: 'DungeonScene',
+        });
+
+        // Cnnfig NiftyRent SDK
+        this.niftyrent = new NiftyRent({
+            defaultContractAddr: "niftyrpg.mintspace2.testnet",
+            allowedRentalProxies: ["nft-rental.testnet"],
         });
     }
 
@@ -18,7 +25,6 @@ export class DungeonScene extends Phaser.Scene {
     create() {
         this.dungeon = new LuminusDungeonGenerator(this);
         this.dungeon.create();
-
         this.player = new Player(
             this,
             this.dungeon.map.widthInPixels / 2,
@@ -26,26 +32,26 @@ export class DungeonScene extends Phaser.Scene {
             PlayerConfig.texture,
             this.dungeon.map
         );
-
         this.cameras.main.startFollow(this.player.container);
         this.cameras.main.setZoom(2.5);
-        // camera.setBounds(
-        //     0,
-        //     0,
-        //     this.dungeon.map.widthInPixels,
-        //     this.dungeon.map.heightInPixels
-        // );
+        this.cameras.main.setAlpha(0);
 
+        this.niftyrent.init().then(() => {
+            this.niftyrent.is_current_user(window.accountId, "1").then(isUser => {
+                if (isUser) {
+                    // Add the candle item to the player's inventory.
+                    this.player.items.push({ id: 3, count: 1 });
+                    this._prepareDungoen();
+                }
+            })
+        })
+    }
+
+    _prepareDungoen() {
         this.physics.add.collider(
             this.player.container,
             this.dungeon.groundLayer
         );
-        // if (!this.scene.isActive('JoystickScene')) {
-        //     this.scene.launch('JoystickScene', {
-        //         player: this.player,
-        //         map: this.dungeon.map,
-        //     });
-        // }
         this.scene.launch('DialogScene', {
             player: this.player,
             map: this.dungeon.map,
@@ -88,16 +94,18 @@ export class DungeonScene extends Phaser.Scene {
             loop: true,
         });
         this.ambientSound.play();
-
         this.fog = new LuminusFogWarManager(
             this,
             this.dungeon.map,
             this.player
         );
         this.fog.createFog();
+        this.cameras.main.setAlpha(1);
     }
 
     update() {
-        this.fog.updateFog();
+        if (this.fog) {
+            this.fog.updateFog();
+        }
     }
 }

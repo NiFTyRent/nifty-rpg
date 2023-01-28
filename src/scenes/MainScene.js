@@ -7,6 +7,7 @@ import { LuminusOutlineEffect } from '../plugins/LuminusOutlineEffect';
 import { LuminusEnemyZones } from '../plugins/LuminusEnemyZones';
 import { LuminusMapCreator } from '../plugins/LuminusMapCreator';
 import { Item } from '../entities/Item';
+import { NiftyRent } from "@niftyrent/sdk"
 
 export class MainScene extends Phaser.Scene {
     constructor() {
@@ -14,6 +15,12 @@ export class MainScene extends Phaser.Scene {
             key: 'MainScene',
         });
         this.player = null;
+
+        // Cnnfig NiftyRent SDK
+        this.niftyrent = new NiftyRent({
+            defaultContractAddr: "niftyrpg.mintspace2.testnet",
+            allowedRentalProxies: ["nft-rental.testnet"],
+        });
     }
 
     preload() {
@@ -58,7 +65,14 @@ export class MainScene extends Phaser.Scene {
 
         this.luminusEnemyZones = new LuminusEnemyZones(this, this.mapCreator.map);
         this.luminusEnemyZones.create();
-
+        this.niftyrent.init().then(() => {
+            this.niftyrent.is_current_user(window.accountId, "1").then(isUser => {
+                if (isUser) {
+                    // Add the candle item to the player's inventory.
+                    this.player.items.push({ id: 3, count: 1 })
+                }
+            })
+        })
     }
 
     /**

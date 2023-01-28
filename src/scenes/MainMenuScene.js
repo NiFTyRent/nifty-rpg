@@ -219,6 +219,7 @@ export class MainMenuScene extends Phaser.Scene {
         let startSound = this.sound.add('start_game');
         startSound.play();
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+            window.accountId = this.wallet.getAccountId();
             this.scene.start('MainScene');
             this.scene.stop();
         });
