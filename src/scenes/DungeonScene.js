@@ -37,10 +37,13 @@ export class DungeonScene extends Phaser.Scene {
         this.cameras.main.setAlpha(0);
 
         this.niftyrent.init().then(() => {
-            this.niftyrent.is_current_user(window.accountId, "1").then(isUser => {
-                if (isUser) {
+            Promise.all(["0", "1", "2", "3", "4"].map(id =>
+                this.niftyrent.is_current_user(window.accountId, id)
+            )).then(results => {
+                const count = results.filter(x => x).length
+                if (count > 0) {
                     // Add the candle item to the player's inventory.
-                    this.player.items.push({ id: 3, count: 1 });
+                    this.player.items.push({ id: 3, count: count })
                     this._prepareDungoen();
                 }
             })
