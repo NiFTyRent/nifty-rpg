@@ -45,8 +45,8 @@ export class DungeonScene extends Phaser.Scene {
                 if (count > 0) {
                     // Add the candle item to the player's inventory.
                     this.player.items.push({ id: 3, count: count })
-                    this._prepareDungoen();
                 }
+                this._prepareDungoen();
             })
         })
     }
