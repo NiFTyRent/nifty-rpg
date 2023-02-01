@@ -4,6 +4,7 @@ import { LuminusDungeonGenerator } from '../plugins/LuminusDungeonGenerator';
 import { LuminusFogWarManager } from '../plugins/LuminusFogWarManager';
 import { Enemy } from '../entities/Enemy';
 import { PlayerConfig } from '../consts/player/Player';
+import { CANDLE_NFT_TOKEN_IDS } from '../consts/NFT';
 import { NiftyRent } from "@niftyrent/sdk"
 
 export class DungeonScene extends Phaser.Scene {
@@ -37,7 +38,7 @@ export class DungeonScene extends Phaser.Scene {
         this.cameras.main.setAlpha(0);
 
         this.niftyrent.init().then(() => {
-            Promise.all(["0", "1", "2", "3", "4"].map(id =>
+            Promise.all(CANDLE_NFT_TOKEN_IDS.map(id =>
                 this.niftyrent.is_current_user(window.accountId, id)
             )).then(results => {
                 const count = results.filter(x => x).length

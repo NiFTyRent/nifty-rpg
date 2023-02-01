@@ -3,11 +3,10 @@ import { LuminusWarp } from '../plugins/LuminusWarp';
 import { LuminusObjectMarker } from '../plugins/LuminusObjectMarker';
 import AnimatedTiles from '../plugins/AnimatedTiles';
 import { LuminusEnvironmentParticles } from '../plugins/LuminusEnvironmentParticles';
-import { LuminusOutlineEffect } from '../plugins/LuminusOutlineEffect';
 import { LuminusEnemyZones } from '../plugins/LuminusEnemyZones';
 import { LuminusMapCreator } from '../plugins/LuminusMapCreator';
-import { Item } from '../entities/Item';
 import { NiftyRent } from "@niftyrent/sdk"
+import { CANDLE_NFT_TOKEN_IDS } from '../consts/NFT';
 
 export class MainScene extends Phaser.Scene {
     constructor() {
@@ -66,7 +65,7 @@ export class MainScene extends Phaser.Scene {
         this.luminusEnemyZones = new LuminusEnemyZones(this, this.mapCreator.map);
         this.luminusEnemyZones.create();
         this.niftyrent.init().then(() => {
-            Promise.all(["0", "1", "2", "3", "4"].map(id =>
+            Promise.all(CANDLE_NFT_TOKEN_IDS.map(id =>
                 this.niftyrent.is_current_user(window.accountId, id)
             )).then(results => {
                 const count = results.filter(x => x).length
