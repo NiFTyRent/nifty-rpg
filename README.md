@@ -2,7 +2,7 @@
 
 This is a dummy RPG game demonstrating the power of integrating NFT into your games.
 
-[Try in your browser!](https://nifty-rpg.netlify.app/)
+⚔️[Try in your browser!](https://nifty-rpg.netlify.app/)⚔️
 
 
 This is demo game is using [Luminus RPG PhaserJS Project Template](https://github.com/SkyAlpha/luminus-rpg), which is based on the [Phaser Framework](https://phaser.io/).
