@@ -42,6 +42,8 @@ import h_keyboard_key from '../assets/sprites/H_Key_Light.png';
 import esc_keyboard_key from '../assets/sprites/Esc_Key_Light.png';
 import enter_keyboard_key from '../assets/sprites/enter_keyboard_key.png';
 import buttonXboxWindows from '../assets/sprites/XboxOne_Windows.png';
+import niftyrent from '../assets/sprites/niftyrent.png';
+
 
 // Inventory
 import inventory_box from '../assets/sprites/inventory_box.png';
@@ -188,6 +190,10 @@ export const Images = [
   {
     name: 'enter_keyboard_key',
     image: enter_keyboard_key,
+  },
+  {
+    name: 'niftyrent',
+    image: niftyrent,
   },
   {
     name: 'h_keyboard_key',

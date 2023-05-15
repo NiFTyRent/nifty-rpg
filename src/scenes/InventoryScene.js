@@ -55,6 +55,12 @@ export class InventoryScene extends Phaser.Scene {
         this.inventorySlots = null;
 
         /**
+         * The Rent button.
+         * @type { Phaser.GameObjects.Image }
+         */
+        this.rentButton = null;
+
+        /**
          * The Close button image.
          * @type { Phaser.GameObjects.Image }
          */
@@ -198,6 +204,7 @@ export class InventoryScene extends Phaser.Scene {
         this.inventoryTitle = this.panelComponent.panelTitle;
         this.inventoryTitleText = this.panelComponent.panelTitleText;
         this.createSlots();
+        this.createRentButton();
         this.createCloseButton();
         this.createItems();
         if (!LuminusUtils.isMobile() || (LuminusUtils.isMobile() && this.input.gamepad.pad1))
@@ -532,6 +539,59 @@ export class InventoryScene extends Phaser.Scene {
             this.helpPanel = null;
         }
     }
+
+    /**
+     * Creates the Rent Button.
+     */
+    createRentButton() {
+        this.rentButton = this.add.sprite(
+            this.inventoryBackground.x + this.backgroundSlotPadding + this.slotMargin,
+            this.inventoryBackground.y + this.backgroundSlotPaddingTop - 50,
+            "niftyrent", 
+        ).setInteractive().setScale(0.25).setOrigin(0, 0.5);
+
+        
+        this.rentButton.on('pointerup', (pointer) => {
+          console.log("CLICKED")
+          this.openRentMarketplace();
+        });
+    }
+
+    /**
+     * Inserts an iframe of the Rent Marketplace.
+     */
+    openRentMarketplace() {
+      // Insert the iframe.
+      let iframe = document.createElement('iframe');
+      iframe.src = 'https://testnet.niftyrent.xyz/app/shops/niftyrpg.mintspace2.testnet/';
+      iframe.width = 800;
+      iframe.height = 600;
+      iframe.style.top = '50%';
+      iframe.style.position = 'absolute';
+      iframe.style.left = '50%';
+      iframe.style.transform = 'translate(-50%, -50%)';
+      iframe.style.zIndex = 1000;
+      iframe.style.border = 'none';
+      iframe.id = 'rent-marketplace';
+      document.body.appendChild(iframe);
+      // Create the close button.
+      let closeButton = document.createElement('button');
+      closeButton.innerHTML = 'Close';
+      closeButton.style.position = 'absolute';
+      closeButton.style.top = 'calc(50% - 320px)';
+      closeButton.style.left = '50%';
+      closeButton.style.transform = 'translate(-50%, -50%)';
+      closeButton.style.zIndex = 1001;
+      closeButton.style.border = 'none';
+      closeButton.id = 'rent-marketplace-close';
+      closeButton.onclick = () => {
+        document.body.removeChild(iframe);
+        document.body.removeChild(closeButton);
+      }
+      document.body.appendChild(closeButton);
+    }
+
+
 
     createLegendSection() {
         this.actionButtonLegend = this.add.sprite(
