@@ -570,7 +570,7 @@ export class InventoryScene extends Phaser.Scene {
     openRentMarketplace() {
       // Insert the iframe.
       let iframe = document.createElement('iframe');
-      iframe.src = 'http://testnet.niftyrent.xyz/app/shops/niftyrpg.mintspace2.testnet/';
+      iframe.src = 'https://testnet.niftyrent.xyz/app/shops/niftyrpg.mintspace2.testnet/';
       iframe.width = 800;
       iframe.height = 800;
       iframe.style.top = '50%';
