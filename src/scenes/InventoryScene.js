@@ -6,6 +6,7 @@ import { Item } from '../entities/Item';
 import { Player } from '../entities/Player';
 import { LuminusInterfaceController } from '../plugins/LuminusInterfaceController';
 import { LuminusUtils } from '../utils/LuminusUtils';
+import { getNftItems } from '../consts/NFT';
 export const InventorySceneName = 'InventoryScene';
 
 /**
@@ -232,6 +233,11 @@ export class InventoryScene extends Phaser.Scene {
         }
 
         this.registerKeyboardShortcuts();
+
+        this.player.nftItems = [];
+        getNftItems(window.accountId, (count) => {
+          this.player.nftItems = [{ id: 3, count: count }]
+        })
     }
 
     registerKeyboardShortcuts() {
@@ -466,22 +472,23 @@ export class InventoryScene extends Phaser.Scene {
      * Loops through the Player's items and Adds it to the inventory Slots
      */
     createItems() {
+      const allItems = this.player.allItems();
         // this.clearSlots();
         let slotIndex = 0;
         let time = 0;
-        for (let i = 0; i < this.player.items.length; i++) {
+        for (let i = 0; i < allItems.length; i++) {
             let slot = this.slots[slotIndex];
             slotIndex++;
-            if (this.player.items[i] && this.player.items[i].id) {
+            if (allItems[i] && allItems[i].id) {
                 let text;
                 let item = new Item(
                     this,
                     slot.x + slot.width / 2,
                     slot.y + slot.height / 2 - 7,
-                    this.player.items[i].id
+                    allItems[i].id
                 );
                 text = this.add
-                    .text(item.x, item.y + 15 + (item.height * item.scaleY) / 2, this.player.items[i].count)
+                    .text(item.x, item.y + 15 + (item.height * item.scaleY) / 2, allItems[i].count)
                     .setOrigin(0.5, 0.5);
                 // Sets the slot item;
                 slot.item = item;
@@ -523,7 +530,7 @@ export class InventoryScene extends Phaser.Scene {
                     });
                     item.setScale(item.inventoryScale);
                 } else {
-                    for (let noStackCount = 0; noStackCount < this.player.items[i].count; noStackCount++) {
+                    for (let noStackCount = 0; noStackCount < allItems[i].count; noStackCount++) {
                         // TODO - Create the logic for Equipments.
                     }
                 }
@@ -563,11 +570,12 @@ export class InventoryScene extends Phaser.Scene {
     openRentMarketplace() {
       // Insert the iframe.
       let iframe = document.createElement('iframe');
-      iframe.src = 'https://testnet.niftyrent.xyz/app/shops/niftyrpg.mintspace2.testnet/';
+      iframe.src = 'http://localhost:5173/app/shops/niftyrpg.mintspace2.testnet/';
       iframe.width = 800;
-      iframe.height = 600;
+      iframe.height = 800;
       iframe.style.top = '50%';
       iframe.style.position = 'absolute';
+      iframe.style.backgroundColor = 'white';
       iframe.style.left = '50%';
       iframe.style.transform = 'translate(-50%, -50%)';
       iframe.style.zIndex = 1000;
@@ -578,13 +586,18 @@ export class InventoryScene extends Phaser.Scene {
       let closeButton = document.createElement('button');
       closeButton.innerHTML = 'Close';
       closeButton.style.position = 'absolute';
-      closeButton.style.top = 'calc(50% - 320px)';
+      closeButton.style.top = 'calc(50% - 420px)';
       closeButton.style.left = '50%';
       closeButton.style.transform = 'translate(-50%, -50%)';
       closeButton.style.zIndex = 1001;
       closeButton.style.border = 'none';
       closeButton.id = 'rent-marketplace-close';
       closeButton.onclick = () => {
+        // Refetch the NFT items.
+        this.player.nftItems = [];
+        getNftItems(window.accountId, (count) => {
+          this.player.nftItems = [{ id: 3, count: count }]
+        })
         document.body.removeChild(iframe);
         document.body.removeChild(closeButton);
       }

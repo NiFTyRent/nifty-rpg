@@ -98,6 +98,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.items = [];
 
         /**
+         * An Array with the NFT Item ID's and the number of that specific Item that the player has.
+         * @type { object }
+         */
+        this.nftItems = [];
+
+        /**
          * The zone that will interact as a hitzone.
          * @type { Phaser.GameObjects.Zone }
          */
@@ -189,6 +195,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.setPhysics();
         // All the dependencies that need to be inside the update game loop.
         this.scene.events.on('update', this.onUpdate, this);
+    }
+    
+    allItems() {
+        return this.items.concat(this.nftItems);
     }
 
     /**

@@ -4,19 +4,12 @@ import { LuminusDungeonGenerator } from '../plugins/LuminusDungeonGenerator';
 import { LuminusFogWarManager } from '../plugins/LuminusFogWarManager';
 import { Enemy } from '../entities/Enemy';
 import { PlayerConfig } from '../consts/player/Player';
-import { CANDLE_NFT_TOKEN_IDS } from '../consts/NFT';
-import { NiftyRent } from "@niftyrent/sdk"
+import { CANDLE_NFT_TOKEN_IDS, getNftItems } from '../consts/NFT';
 
 export class DungeonScene extends Phaser.Scene {
     constructor() {
         super({
             key: 'DungeonScene',
-        });
-
-        // Cnnfig NiftyRent SDK
-        this.niftyrent = new NiftyRent({
-            defaultContractAddr: "niftyrpg.mintspace2.testnet",
-            allowedRentalProxies: ["nft-rental.testnet"],
         });
     }
 
@@ -37,17 +30,10 @@ export class DungeonScene extends Phaser.Scene {
         this.cameras.main.setZoom(2.5);
         this.cameras.main.setAlpha(0);
 
-        this.niftyrent.init().then(() => {
-            Promise.all(CANDLE_NFT_TOKEN_IDS.map(id =>
-                this.niftyrent.is_current_user(window.accountId, id)
-            )).then(results => {
-                const count = results.filter(x => x).length
-                if (count > 0) {
-                    // Add the candle item to the player's inventory.
-                    this.player.items.push({ id: 3, count: count })
-                }
-                this._prepareDungoen();
-            })
+        this.player.nftItems = [];
+        getNftItems(window.accountId, (count) => {
+          this.player.nftItems = [{ id: 3, count: count }]
+          this._prepareDungoen();
         })
     }
 

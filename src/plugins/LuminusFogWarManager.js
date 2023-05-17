@@ -136,7 +136,7 @@ export class LuminusFogWarManager {
     }
 
     visibleRange() {
-        if (this.player.items.find(i => i.id == 3)) {
+        if (this.player.allItems().find(i => i.id == 3)) {
             return 2.0;
         } else {
             return 0.7;
